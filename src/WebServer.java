@@ -1,11 +1,22 @@
 import java.net.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.io.*;
+
+
+class Main{
+    public static void main(String[] args) throws IOException
+    {
+    	int PORT=10008;
+    	int SERVER_STATUS=2;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
+    	String ROOT_DIRECTORY="C:\\Users\\user\\Desktop\\TestSite";
+    	String MAINTENANCE_DIRECTORY=ROOT_DIRECTORY+"\\maintenance";		
+        
+    	
+    	WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+        webserver.startServer();
+    }
+}
 
 public class WebServer extends Thread {
 	
@@ -188,7 +199,6 @@ public class WebServer extends Thread {
 			while ((inputLine = in.readLine()) != null) {
 				System.out.println("Server: " + inputLine);
 				out.println(inputLine);
-
 				if (inputLine.trim().equals(""))
 					break;
 			}*/
@@ -219,7 +229,12 @@ public class WebServer extends Thread {
 				else {
 					notfoundResponse(contentType,clientOutput );
 				}
-			}		
+			}
+			else if(status==3){
+				in.close();
+				clientOutput.close();
+				clientSocket.close();
+			}
 			//out.close();
 			in.close();
 			clientOutput .close();
@@ -233,11 +248,4 @@ public class WebServer extends Thread {
 		
 }
 
-class Main{
-    public static void main(String[] args) throws IOException
-    {
 
-        WebServer webserver = new WebServer(10008,1,"C:\\Users\\user\\Desktop\\TestSite","C:\\Users\\user\\Desktop\\TestSite\\maintenance");      
-         webserver.startServer();
-    }
-}
