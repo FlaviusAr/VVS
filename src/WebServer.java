@@ -8,13 +8,14 @@ class Main{
     public static void main(String[] args) throws IOException
     {
     	int PORT=10008;
-    	int SERVER_STATUS=2;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
+    	int SERVER_STATUS=1;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
     	String ROOT_DIRECTORY="C:\\Users\\user\\Desktop\\TestSite";
     	String MAINTENANCE_DIRECTORY=ROOT_DIRECTORY+"\\maintenance";		
         
     	
     	WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
-        webserver.startServer();
+        webserver.startServer(); 
+        
     }
 }
 
@@ -50,7 +51,10 @@ public class WebServer extends Thread {
 	}
 	
 	public void setRoot_dir(String new_root_dir) {
+		File auxd1=new File(new_root_dir);
+		if(auxd1.isDirectory()) {
 		root_dir=new_root_dir;
+		}
 	}
 	
 	public String getRoot_dir() {
@@ -58,7 +62,10 @@ public class WebServer extends Thread {
 	}
 	
 	public void setMaint_dir(String new_maint_dir) {
+		File auxd2=new File(new_maint_dir);
+		if(auxd2.isDirectory()) {
 		maint_dir=new_maint_dir;
+		}
 	}
 	
 	public String getMaint_dir() {
@@ -68,9 +75,9 @@ public class WebServer extends Thread {
 	public String getContentType(String fileRequested) {
 		if (fileRequested.endsWith(".htm")  ||  fileRequested.endsWith(".html")||fileRequested.endsWith("/"))
 			return "text/html";
-		else if(fileRequested.endsWith(".hcss"))
+		else if(fileRequested.endsWith(".css"))
 			return "text/css";
-		else return "Eroare la ContentType";
+		else return "NOTFOUND ContentType";
 	}
 	
 	public void startServer() throws IOException {	
