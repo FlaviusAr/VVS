@@ -1,4 +1,5 @@
 import java.net.*;
+import java.nio.charset.Charset;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.io.*;
@@ -7,6 +8,7 @@ import java.io.*;
 class Main{
     public static void main(String[] args) throws IOException
     {
+    	
     	int PORT=10008;
     	int SERVER_STATUS=1;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
     	String ROOT_DIRECTORY="C:\\Users\\user\\Desktop\\TestSite";
@@ -26,7 +28,7 @@ public class WebServer extends Thread {
 	public int status;
 	public String root_dir;
 	public String maint_dir;
-
+	
 	public WebServer(int port,int status,String root_dir,String maint_dir) {
 		this.port=port;
 		this.status=status;
@@ -36,6 +38,7 @@ public class WebServer extends Thread {
 	
 	public void setPort(int new_port) {
 		port=new_port;
+		
 	}
 	
 	public int getPort() {
@@ -125,7 +128,7 @@ public class WebServer extends Thread {
 	
 		System.out.println("HTTP/1.1 200 OK");
 		System.out.println("ContentType: " + contentType);
-		clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());
+		clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes(Charset.forName("UTF-8")));
         clientOutput.write(("ContentType: " + contentType + "\r\n").getBytes());
         clientOutput.write("\r\n".getBytes());
         
@@ -145,7 +148,7 @@ public class WebServer extends Thread {
 		
 		System.out.println("HTTP/1.1 503 Service Unavailable");
 		System.out.println("ContentType: " + contentType);
-		clientOutput.write("HTTP/1.1 503 Service Unavailable\r\n".getBytes());
+		clientOutput.write("HTTP/1.1 503 Service Unavailable\r\n".getBytes(Charset.forName("UTF-8")));
 		clientOutput.write(("ContentType: " + contentType + "\r\n").getBytes());
 		clientOutput.write("\r\n".getBytes());
 	
@@ -176,7 +179,7 @@ public class WebServer extends Thread {
 		
 		System.out.println("HTTP/1.1 404 File Not Found");
 		System.out.println("ContentType: " + contentType);
-		clientOutput.write("HTTP/1.1 404 File Not Found\r\n".getBytes());
+		clientOutput.write("HTTP/1.1 404 File Not Found\r\n".getBytes(Charset.forName("UTF-8")));
 		clientOutput.write(("ContentType: " + contentType + "\r\n").getBytes());
 		//clientOutput.write("\r\n".getBytes());
 		
@@ -210,7 +213,14 @@ public class WebServer extends Thread {
 					break;
 			}*/
 			
-			String firstline =in.readLine();
+			String firstline = null;
+			try {
+		        firstline = in.readLine();
+		        if(firstline == null) {return ;}
+	                           }
+		    catch (IOException e) {e.printStackTrace();}
+
+			
 			StringTokenizer parse = new StringTokenizer(firstline);
 			parse.nextToken();
 			String path=parse.nextToken();
