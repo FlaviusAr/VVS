@@ -1,0 +1,21 @@
+Dereference of the result of readLine() without nullcheck-->Rezultatul invocării readLine () este dereferențiat fără a verifica dacă rezultatul este nul. 
+					               Dacă nu mai sunt linii de text de citit, readLine () va returna nul și dereferențierea care 
+					               va genera o excepție a indicatorului nul.
+					              
+					               Am rezolvat prin a verifica daca rezultatul este null si am "prins exceptia"
+					               String firstline =in.readLine();-->	try {
+									        firstline = in.readLine();
+									        if(firstline == null) {return ;}
+								                           }
+									  catch (IOException e) {e.printStackTrace();}
+
+
+
+
+Found reliance on default encoding->Findbugs ne avertizeaza ca ar trebui sa ne gandim ce codificare folosim pentru outputul nostru.
+		                                Deoarece daca de ex. scriem intru-un fisier trebuie sa stim la ce se asteapta cititorii acestui fisier.
+                                                                        Este mai sigur sa folosim o codificare specifica astfel incat sa nu scriem intr-un fel si sa citim in altfel.
+			            
+		                                Am rezolvat prin specificarea codificari.
+		                                clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());-->clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes(Charset.forName("UTF-8")));
+				
