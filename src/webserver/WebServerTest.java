@@ -1,3 +1,4 @@
+package webserver;
 import org.junit.*;
 import java.net.*;
 import java.io.*;
@@ -50,8 +51,7 @@ public class WebServerTest {
     @Test(expected=IOException.class)
     public void usesameportsametime() throws IOException{
     Thread ServerThread1 = new Thread(new Runnable() {
-        @Override
-      	public void run(){	
+        public void run(){	
       	try {
   			webserver.startServer();
   		} catch (IOException e) {
@@ -63,8 +63,7 @@ public class WebServerTest {
 
     Thread ServerThread2 = new Thread(new Runnable() {
 
-        @Override
-    	public void run(){	
+        public void run(){	
     	try {
 			webserver.startServer();
 		} catch (IOException e) {

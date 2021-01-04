@@ -1,27 +1,100 @@
+package webserver;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+
+
 import java.io.*;
 
-
+/*
 class Main{
     public static void main(String[] args) throws IOException
     {
-    	
+    	/*
     	int PORT=10008;
     	int SERVER_STATUS=1;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
     	String ROOT_DIRECTORY="C:\\Users\\user\\Desktop\\TestSite";
     	String MAINTENANCE_DIRECTORY=ROOT_DIRECTORY+"\\maintenance";		
-        
+        int state = 3;
     	
+        
+
+    	int PORT;
+    	int SERVER_STATUS;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
+    	String ROOT_DIRECTORY;
+    	String MAINTENANCE_DIRECTORY;		
+        int state;
+    	
+    	
+    	while(true) {
+				switch(state) {
+				case 1:
+				{
+					PORT=GUI2.getPort();
+					SERVER_STATUS=1;
+					ROOT_DIRECTORY=GUI2.getRootDirectory();
+					MAINTENANCE_DIRECTORY=GUI2.getMaintenanceDirectory();
+					WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+			        webserver.startServer(); 
+				}
+					break;
+				case 2:
+				{
+					PORT=GUI2.getPort();
+					SERVER_STATUS=2;
+					ROOT_DIRECTORY=GUI2.getRootDirectory();
+					MAINTENANCE_DIRECTORY=GUI2.getMaintenanceDirectory();
+					WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+			        webserver.startServer(); 
+				}
+					break;
+				case 3:
+				{
+					PORT=GUI2.getPort();
+					SERVER_STATUS=3;
+					ROOT_DIRECTORY=GUI2.getRootDirectory();
+					MAINTENANCE_DIRECTORY=GUI2.getMaintenanceDirectory();
+					WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+			        webserver.startServer(); 
+				}
+				default:
+					break;
+				}
+		}
+    
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	/*
     	WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
         webserver.startServer(); 
         
     }
-}
+}*/
 
 public class WebServer extends Thread {
+	
+	
+	public static int PORT;
+	public static int SERVER_STATUS;  //SERVER_STATUS=1->RUNNING SERVER_STATUS=2->MAINTENANCE  SERVER_STATUS=3->STOPPED
+	public static String ROOT_DIRECTORY;
+	public static String MAINTENANCE_DIRECTORY;		
+    public static int state;
+	public static GUI2 gui;
+	
+	
+	
+	
+	
 	
 	protected Socket clientSocket;
 	public int port;
@@ -91,7 +164,7 @@ public class WebServer extends Thread {
 			try {
 				//while (true) {
 					System.out.println("Waiting for Connection");
-				   clientSocket=serverSocket.accept();
+				    clientSocket=serverSocket.accept();
 					clientHandler(clientSocket);
 				//}
 			} catch (IOException e) {
@@ -263,6 +336,58 @@ public class WebServer extends Thread {
 		}
 	}
 		
+	public static void setState(int n) {
+		state=n;
+	}
+	
+	public static void GUIStart() {
+		state=3;
+		gui = new GUI2();
+	}
+	
+	public static void serverStart() {
+		try {
+    	while(true) {
+				switch(state) {
+				case 1:
+					PORT=GUI2.getPort();
+					SERVER_STATUS=1;
+					ROOT_DIRECTORY=GUI2.getRootDirectory();
+					MAINTENANCE_DIRECTORY=GUI2.getMaintenanceDirectory();
+					WebServer webserver = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+			        webserver.startServer(); 
+					break;
+				case 2:
+					PORT=GUI2.getPort();
+					SERVER_STATUS=2;
+					ROOT_DIRECTORY=GUI2.getRootDirectory();
+					MAINTENANCE_DIRECTORY=GUI2.getMaintenanceDirectory();
+					WebServer webserver2 = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+			        webserver2.startServer(); 
+					break;
+				case 3:
+					PORT=GUI2.getPort();
+					SERVER_STATUS=3;
+					ROOT_DIRECTORY=GUI2.getRootDirectory();
+					MAINTENANCE_DIRECTORY=GUI2.getMaintenanceDirectory();
+					WebServer webserver3 = new WebServer(PORT,SERVER_STATUS,ROOT_DIRECTORY,MAINTENANCE_DIRECTORY);      
+			        webserver3.startServer(); 
+					break;
+				default:
+					break;
+				}
+    	}
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+				
+	}
+	
+	   public static void main(String[] args) throws IOException
+	    {
+		   GUIStart();
+		   serverStart();
+	    }
 }
 
 
